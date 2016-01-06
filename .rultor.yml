@@ -1,0 +1,19 @@
+architect:
+  - aliceice
+
+docker:
+  image: "maven:3.3.3-jdk-8"
+
+install:
+  - "java -version"
+  - "mvn --version"
+
+merge:
+  script:
+    - "mvn clean verify -Pcode-quality -Popenjdk-x64"
+
+release:
+  script:
+    - "mvn versions:set \"-DnewVersion=${tag}\""
+    - "git commit -am \"${tag}\""
+    - "mvn clean verify -Popenjdk-x64"
