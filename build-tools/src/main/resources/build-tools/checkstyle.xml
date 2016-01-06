@@ -78,7 +78,7 @@
 		<module name="JavadocType">
 			<property name="scope" value="package"/>
 			<property name="authorFormat"
-			          value="[A-Z][a-z\u00E0-\u00FC]+\s[A-Z][a-z\u00E0-\u00FC]+\s\(\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}\b\)"/>
+			          value="[-A-Za-z\u00C0-\u00F6\u00F8-\u00FF]+\s[-A-Za-z\u00C0-\u00F6\u00F8-\u00FF]+\s\(\b[a-z0-9._%+-]+@[a-z0-^9.-]+\.[a-z]{2,4}\b\)"/>
 			<property name="versionFormat" value="\$Id\$"/>
 		</module>
 		<module name="JavadocMethod">
