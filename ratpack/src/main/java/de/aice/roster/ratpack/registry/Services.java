@@ -2,13 +2,14 @@ package de.aice.roster.ratpack.registry;
 
 import de.aice.roster.core.registry.Service;
 import de.aice.roster.core.registry.ServiceRegistry;
+import de.aice.roster.ratpack.util.StringUtils;
 import ratpack.func.Action;
 import ratpack.handling.Context;
 import ratpack.http.TypedData;
-import ratpack.jackson.Jackson;
 import ratpack.registry.Registry;
 
 import java.net.HttpURLConnection;
+import java.util.Map;
 import java.util.Optional;
 
 import static de.aice.roster.ratpack.util.Response.defaultErrorHandler;
@@ -19,12 +20,14 @@ import static de.aice.roster.ratpack.util.Response.sendOk;
 import static de.aice.roster.ratpack.util.Response.sendStatus;
 
 /**
- * Entry point to the Ratpack server of Roster.
+ * Web interface of the ServiceRegistry.
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
 public final class Services {
+
+	private static final String LIST_SEPARATOR = ", ";
 
 	/**
 	 * Get all services.
@@ -32,8 +35,24 @@ public final class Services {
 	 * @param ctx Ratpack context
 	 */
 	public static void allServices(final Context ctx) {
-		ServiceRegistry registry = ctx.get(ServiceRegistry.class);
-		ctx.render(Jackson.json(registry.allServices()));
+		ctx.getResponse().send(
+			String.format(
+				"[%s]",
+				ctx.get(ServiceRegistry.class)
+				   .allServices()
+				   .stream()
+				   .map(Services::toJson)
+				   .reduce(StringUtils.EMPTY, StringUtils.concat(LIST_SEPARATOR))
+				   .replaceFirst(LIST_SEPARATOR, StringUtils.EMPTY)
+			)
+		);
+	}
+
+	private static String toJson(final Map.Entry<Service, String> e) {
+		return String.format(
+			"{\"name\": \"%s\", \"env\": \"%s\", \"endpoint\": \"%s\"}",
+			e.getKey().name(), e.getKey().environment(), e.getValue()
+		);
 	}
 
 	/**
@@ -68,7 +87,8 @@ public final class Services {
 
 	private static void register(final Context context) {
 		Service service = context.get(Service.class);
-		context.getRequest().getBody()
+		context.getRequest()
+		       .getBody()
 		       .map(TypedData::getText)
 		       .route(String::isEmpty, sendStatus(context, HttpURLConnection.HTTP_BAD_REQUEST))
 		       .next(registerService(context, service))

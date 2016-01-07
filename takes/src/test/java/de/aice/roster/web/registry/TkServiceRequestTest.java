@@ -16,8 +16,9 @@ import static org.junit.Assert.assertNotNull;
 
 public final class TkServiceRequestTest {
 
-	private static final String REGEX_PATTERN  = "/service/(?<name>.*)/(?<environment>.*)";
-	private static final String QUERY          = "/service/example-service/dev";
+	private static final String PATH           = "/service";
+	private static final String REGEX_PATTERN  = PATH + "/(?<name>.*)/(?<environment>.*)";
+	private static final String QUERY          = PATH + "/example-service/dev";
 	private static final String ENDPOINT       = "http://www.example-service.com/dev";
 	private static final String HTTP_OK        = "HTTP/1.1 200 OK";
 	private static final String HTTP_NOT_FOUND = "HTTP/1.1 404 Not Found";
@@ -75,6 +76,25 @@ public final class TkServiceRequestTest {
 	private Response unregisterService() throws IOException {
 		RqRegex request = new RqRegex.Fake(new RqFake("DELETE", QUERY), REGEX_PATTERN, QUERY);
 		return subject.act(request);
+	}
+
+	@Test
+	public void testGETAllRegisteredServices() throws Exception {
+		Response response = getAllServices();
+		assertThat(response.head()).contains(HTTP_OK);
+		assertThat(new RsPrint(response).printBody()).isEqualTo("[]");
+
+		registerService();
+
+		response = getAllServices();
+		assertThat(response.head()).contains(HTTP_OK);
+		assertThat(new RsPrint(response).printBody()).isEqualTo(
+			"[{\"name\":\"example-service\",\"env\":\"dev\",\"endpoint\":\"http://www.example-service.com/dev\"}]"
+		);
+	}
+
+	private Response getAllServices() throws IOException {
+		return this.subject.act(new RqFake("GET", PATH));
 	}
 
 }

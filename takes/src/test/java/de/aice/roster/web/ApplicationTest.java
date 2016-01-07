@@ -53,8 +53,4 @@ public final class ApplicationTest {
 		}
 	}
 
-	private String localHostAddress() {
-		return String.format("http://localhost:%s/", this.properties.port());
-	}
-
 }

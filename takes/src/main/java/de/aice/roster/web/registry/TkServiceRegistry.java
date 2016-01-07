@@ -7,7 +7,7 @@ import org.takes.facets.fork.TkFork;
 import org.takes.tk.TkWrap;
 
 /**
- * Services interface of Takes server.
+ * Services interface routing of Takes server.
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
@@ -17,7 +17,7 @@ public class TkServiceRegistry extends TkWrap {
 	public TkServiceRegistry(final ServiceRegistry registry) {
 		super(
 			new TkFork(
-				new FkRegex("/(?<name>.*)/(?<environment>.*)", new TkServiceRequest(registry)),
+				new FkRegex("/service/(?<name>.*)/(?<environment>.*)", new TkServiceRequest(registry)),
 				new FkFixed(new TkAllServices(registry))
 			)
 		);

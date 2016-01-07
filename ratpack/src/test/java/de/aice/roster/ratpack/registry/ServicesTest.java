@@ -14,7 +14,9 @@ import ratpack.test.handling.RequestFixture;
 import java.net.HttpURLConnection;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public final class ServicesTest {
 
@@ -54,10 +56,12 @@ public final class ServicesTest {
 
 	@Test
 	public void registerServiceWithInvalidBodyReturns500InternalError() throws Exception {
-		HandlingResult result = RequestFixture.handle(Services::handleServiceRequest, this.fixture.append(
-			f -> f.method("POST")
-			      .body(ENDPOINT, MediaType.PLAIN_TEXT_UTF8)
-			      .getRegistry().add(ServiceRegistry.class, new FailingServiceRegistry()))
+		HandlingResult result = RequestFixture.handle(
+			Services::handleServiceRequest,
+			this.fixture.append(
+				f -> f.method("POST")
+				      .body(ENDPOINT, MediaType.PLAIN_TEXT_UTF8)
+				      .getRegistry().add(ServiceRegistry.class, new FailingServiceRegistry()))
 		);
 		assertEquals(HttpURLConnection.HTTP_INTERNAL_ERROR, result.getStatus().getCode());
 		assertEquals("register not supported", result.getBodyText());

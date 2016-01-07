@@ -68,7 +68,9 @@ public final class Main {
 	private static void requestLogger(final RequestOutcome requestOutcome) {
 		Request req = requestOutcome.getRequest();
 		SentResponse response = requestOutcome.getResponse();
-		Logger.info(Main.class, String.format(
+		Logger.info(
+			Main.class,
+			String.format(
 				"[%s] %s http://%s%s - %s %s",
 				requestOutcome.getSentAt(),
 				req.getMethod(),
@@ -76,7 +78,8 @@ public final class Main {
 				req.getUri(),
 				response.getStatus().getCode(),
 				response.getStatus().getMessage()
-		));
+			)
+		);
 	}
 
 

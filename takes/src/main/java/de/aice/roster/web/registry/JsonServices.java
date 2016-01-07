@@ -28,9 +28,11 @@ public final class JsonServices implements RsJSON.Source {
 	public JsonStructure toJSON() throws IOException {
 		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 		this.entries.stream()
-		            .map(entry -> Json.createObjectBuilder()
-		                              .add("name", entry.getKey().toString())
-		                              .add("environment", entry.getValue()))
+		            .map(entry -> Json
+			            .createObjectBuilder()
+			            .add("name", entry.getKey().name())
+			            .add("env", entry.getKey().environment())
+			            .add("endpoint", entry.getValue()))
 		            .forEach(arrayBuilder::add);
 		return arrayBuilder.build();
 	}
