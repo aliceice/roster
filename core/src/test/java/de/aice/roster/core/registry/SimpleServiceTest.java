@@ -6,8 +6,8 @@ import static org.junit.Assert.assertSame;
 
 public final class SimpleServiceTest {
 
-	public static final String NAME        = "my-service";
-	public static final String ENVIRONMENT = "dev";
+	private static final String NAME        = "my-service";
+	private static final String ENVIRONMENT = "dev";
 
 	private final SimpleService subject = new SimpleService(NAME, ENVIRONMENT);
 

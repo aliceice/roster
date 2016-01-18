@@ -1,13 +1,18 @@
 package de.aice.roster.core.registry;
 
 import de.aice.roster.core.registry.memory.MemoryServiceRegistry;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
-import java.util.Optional;
-
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -56,6 +61,27 @@ public final class MemoryServiceRegistryTest {
 		String endpoint2 = subject.getEndpoint(service).get();
 
 		assertSame(endpoint1, endpoint2);
+	}
+
+	@Test
+	public void allServicesIsEmptySetWithoutRegistrations() throws Exception {
+		Set<Map.Entry<Service, String>> services = this.subject.allServices();
+		assertNotNull(services);
+		assertTrue(services.isEmpty());
+	}
+
+	@Test
+	public void allServicesReturnsAllRegisteredServices() throws Exception {
+		IntStream.rangeClosed(0, new Random().nextInt(10)).forEach(i -> registerService());
+		Set<Map.Entry<Service, String>> entries = this.subject.allServices();
+		assertEquals(this.serviceCount, entries.size());
+
+		entries.stream()
+		       .forEach(entry -> {
+			       Optional<String> endpoint = this.subject.getEndpoint(entry.getKey());
+			       assertTrue(endpoint.isPresent());
+			       assertSame(entry.getValue(), endpoint.get());
+		       });
 	}
 
 	private int serviceCount;

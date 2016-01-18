@@ -2,6 +2,7 @@ package de.aice.roster.web;
 
 import com.jcabi.http.request.JdkRequest;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public final class ApplicationTest {
 		return String.format("http://%s:%s/", InetAddress.getLocalHost().getCanonicalHostName(), properties.port());
 	}
 
+	@Ignore
 	@Test
 	public void testStopShutdownsTheServer() throws Exception {
 		String home = subject.start();

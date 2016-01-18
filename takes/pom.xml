@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.jcabi.incubator</groupId>
 			<artifactId>xembly</artifactId>
-			<version>LATEST</version>
+			<version>0.21.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.saxon</groupId>
@@ -110,6 +110,21 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<rules>
+						<rule>
+							<element>CLASS</element>
+							<excludes>
+								<exclude>*Application</exclude>
+							</excludes>
+						</rule>
+					</rules>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
