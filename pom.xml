@@ -140,7 +140,6 @@
 
 	<modules>
 		<module>core</module>
-		<module>ratpack</module>
 		<module>takes</module>
 	</modules>
 </project>
