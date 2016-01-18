@@ -31,6 +31,11 @@
 				<artifactId>jcabi-log</artifactId>
 				<version>0.17</version>
 			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -38,18 +43,34 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.15</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<version>3.0.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<inherited>true</inherited>
 				<configuration>
 					<source>${versions.jdk}</source>
 					<target>${versions.jdk}</target>
@@ -58,30 +79,66 @@
 		</plugins>
 	</build>
 
+
 	<profiles>
 		<profile>
 			<id>code-quality</id>
 			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-checkstyle-plugin</artifactId>
-							<version>2.15</version>
-						</plugin>
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>findbugs-maven-plugin</artifactId>
-							<version>${versions.findbugs}</version>
-						</plugin>
-					</plugins>
-				</pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-checkstyle-plugin</artifactId>
+						<configuration>
+							<configLocation>build-tools/checkstyle.xml</configLocation>
+							<consoleOutput>true</consoleOutput>
+							<encoding>UTF-8</encoding>
+							<failsOnError>true</failsOnError>
+							<suppressionsLocation>build-tools/checkstyle-suppressions.xml</suppressionsLocation>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>com.puppycrawl.tools</groupId>
+								<artifactId>checkstyle</artifactId>
+								<version>6.8</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>checkstyle</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>checkstyle</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>findbugs-maven-plugin</artifactId>
+						<configuration>
+							<effort>Max</effort>
+							<excludeFilterFile>build-tools/findbugs-exclude.xml</excludeFilterFile>
+							<failOnError>true</failOnError>
+							<findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+							<threshold>Low</threshold>
+							<xmlOutput>true</xmlOutput>
+						</configuration>
+						<executions>
+							<execution>
+								<id>findbugs</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>findbugs</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 	</profiles>
 
 	<modules>
-		<module>build-tools</module>
 		<module>core</module>
 		<module>ratpack</module>
 		<module>takes</module>
