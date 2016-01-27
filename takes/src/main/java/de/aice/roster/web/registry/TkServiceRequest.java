@@ -1,7 +1,8 @@
 package de.aice.roster.web.registry;
 
-import de.aice.roster.core.registry.Service;
-import de.aice.roster.core.registry.ServiceRegistry;
+import de.aice.roster.core.registry.Services;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import org.takes.Response;
 import org.takes.Take;
 import org.takes.facets.fork.FkMethods;
@@ -13,10 +14,6 @@ import org.takes.rs.RsEmpty;
 import org.takes.rs.RsText;
 import org.takes.rs.RsWithStatus;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.util.Optional;
-
 /**
  * Take of service registry interface.
  *
@@ -25,41 +22,41 @@ import java.util.Optional;
  */
 public final class TkServiceRequest implements TkRegex {
 
-	private final ServiceRegistry registry;
+	private final Services services;
 
-	public TkServiceRequest(final ServiceRegistry registry) {
-		this.registry = registry;
+	public TkServiceRequest(final Services services) {
+		this.services = services;
 	}
 
 	@Override
 	public Response act(final RqRegex req) throws IOException {
-		Service service = new RqService(req);
+		String name = req.matcher().group("name");
+		String environment = req.matcher().group("environment");
 		return new TkFork(
-			new FkMethods("GET", getEndpoint(service)),
-			new FkMethods("POST", register(service)),
-			new FkMethods("DELETE", unregister(service))
+			new FkMethods("GET", getEndpoint(name, environment)),
+			new FkMethods("POST", register(name, environment)),
+			new FkMethods("DELETE", unregister(name, environment))
 		).act(req);
 	}
 
-	private Take getEndpoint(final Service service) {
-		return req -> {
-			Optional<String> endpoint = this.registry.getEndpoint(service);
-			return endpoint.map(e -> (Response) new RsText(e))
-			               .orElseGet(() -> new RsWithStatus(HttpURLConnection.HTTP_NOT_FOUND));
-		};
+	private Take getEndpoint(final String name, final String environment) {
+		return req ->
+			this.services.get(name, environment).endpoint()
+			             .map(e -> (Response) new RsText(e))
+			             .orElseGet(() -> new RsWithStatus(HttpURLConnection.HTTP_NOT_FOUND));
 	}
 
-	private Take register(final Service service) {
+	private Take register(final String name, final String environment) {
 		return req -> {
 			String endpoint = new RqPrint(req).printBody();
-			this.registry.register(service, endpoint);
+			this.services.add(name, environment, endpoint);
 			return new RsEmpty();
 		};
 	}
 
-	private Take unregister(final Service service) {
+	private Take unregister(final String name, final String environment) {
 		return req -> {
-			this.registry.unregister(service);
+			this.services.remove(name, environment);
 			return new RsEmpty();
 		};
 	}

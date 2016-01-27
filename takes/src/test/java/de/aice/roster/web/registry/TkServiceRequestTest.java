@@ -1,6 +1,6 @@
 package de.aice.roster.web.registry;
 
-import de.aice.roster.core.registry.memory.MemoryServiceRegistry;
+import de.aice.roster.core.registry.memory.ImServices;
 import de.aice.roster.web.TkRoot;
 import org.junit.Test;
 import org.takes.Response;
@@ -23,7 +23,7 @@ public final class TkServiceRequestTest {
 	private static final String HTTP_OK        = "HTTP/1.1 200 OK";
 	private static final String HTTP_NOT_FOUND = "HTTP/1.1 404 Not Found";
 
-	private final Take subject = new TkRoot(new MemoryServiceRegistry());
+	private final Take subject = new TkRoot(new ImServices());
 
 	@Test
 	public void testGETReturns404ForUnknownService() throws Exception {

@@ -1,6 +1,6 @@
 package de.aice.roster.web.registry;
 
-import de.aice.roster.core.registry.ServiceRegistry;
+import de.aice.roster.core.registry.Services;
 import org.takes.facets.fork.FkFixed;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.TkFork;
@@ -12,13 +12,13 @@ import org.takes.tk.TkWrap;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public class TkServiceRegistry extends TkWrap {
+public class TkServices extends TkWrap {
 
-	public TkServiceRegistry(final ServiceRegistry registry) {
+	public TkServices(final Services services) {
 		super(
 			new TkFork(
-				new FkRegex("/service/(?<name>.*)/(?<environment>.*)", new TkServiceRequest(registry)),
-				new FkFixed(new TkAllServices(registry))
+				new FkRegex("/service/(?<name>.*)/(?<environment>.*)", new TkServiceRequest(services)),
+				new FkFixed(new TkAllServices(services))
 			)
 		);
 	}

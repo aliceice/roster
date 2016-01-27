@@ -1,5 +1,7 @@
 package de.aice.roster.core.registry;
 
+import java.util.Optional;
+
 /**
  * Service contract.
  *
@@ -9,17 +11,24 @@ package de.aice.roster.core.registry;
 public interface Service {
 
 	/**
-	 * Name of the service.
+	 * Name of service.
 	 *
-	 * @return service name
+	 * @return Service name
 	 */
 	String name();
 
 	/**
-	 * Environment of service.
+	 * Service environment.
 	 *
-	 * @return service environment
+	 * @return Environment
 	 */
 	String environment();
+
+	/**
+	 * Endpoint of service. Can be absent.
+	 *
+	 * @return Optional service endpoint.
+	 */
+	Optional<String> endpoint();
 
 }

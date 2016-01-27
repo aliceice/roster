@@ -1,11 +1,10 @@
 package de.aice.roster.web;
 
-import de.aice.roster.core.registry.memory.MemoryServiceRegistry;
-import org.takes.http.Exit;
-import org.takes.http.FtBasic;
-
+import de.aice.roster.core.registry.memory.ImServices;
 import java.io.IOException;
 import java.net.InetAddress;
+import org.takes.http.Exit;
+import org.takes.http.FtBasic;
 
 /**
  * Roster application.
@@ -50,7 +49,7 @@ public final class Application {
 		try {
 			new FtBasic(
 				new TkRoot(
-					new MemoryServiceRegistry()), this.properties.port()
+					new ImServices()), this.properties.port()
 			).start(this.exit);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
