@@ -6,7 +6,7 @@ package de.aice.roster.web;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public final class SystemProperties implements Properties {
+final class SystemProperties implements Properties {
 
 	private static final int DEFAULT_PORT = 8080;
 

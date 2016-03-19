@@ -20,11 +20,11 @@ import org.takes.rs.RsWithStatus;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public final class TkServiceRequest implements TkRegex {
+final class TkServiceRequest implements TkRegex {
 
 	private final Services services;
 
-	public TkServiceRequest(final Services services) {
+	TkServiceRequest(final Services services) {
 		this.services = services;
 	}
 
@@ -34,22 +34,22 @@ public final class TkServiceRequest implements TkRegex {
 		String environment = req.matcher().group("environment");
 		return new TkFork(
 			new FkMethods("GET", getEndpoint(name, environment)),
-			new FkMethods("POST", register(name, environment)),
+			new FkMethods("POST,PUT", register(name, environment)),
 			new FkMethods("DELETE", unregister(name, environment))
 		).act(req);
 	}
 
 	private Take getEndpoint(final String name, final String environment) {
 		return req ->
-			this.services.get(name, environment).endpoint()
-			             .map(e -> (Response) new RsText(e))
+			this.services.getEndpoint(name, environment)
+			             .map(RsText::new)
+			             .map(Response.class::cast)
 			             .orElseGet(() -> new RsWithStatus(HttpURLConnection.HTTP_NOT_FOUND));
 	}
 
 	private Take register(final String name, final String environment) {
 		return req -> {
-			String endpoint = new RqPrint(req).printBody();
-			this.services.add(name, environment, endpoint);
+			this.services.put(name, environment, new RqPrint(req).printBody());
 			return new RsEmpty();
 		};
 	}

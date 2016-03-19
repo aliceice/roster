@@ -38,7 +38,7 @@ public final class Application {
 	 * @return Home URL
 	 * @throws Exception if something goes wrong.
 	 */
-	public String start() throws Exception {
+	String start() throws Exception {
 		new Thread(this::startTakes).start();
 		return String.format(
 			"http://%s:%s/", InetAddress.getLocalHost().getCanonicalHostName(), this.properties.port()
@@ -48,8 +48,7 @@ public final class Application {
 	private void startTakes() {
 		try {
 			new FtBasic(
-				new TkRoot(
-					new ImServices()), this.properties.port()
+				new TkRoot(new ImServices()), this.properties.port()
 			).start(this.exit);
 		} catch (final IOException e) {
 			throw new RuntimeException(e);

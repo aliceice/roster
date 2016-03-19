@@ -16,4 +16,4 @@ release:
   script:
     - "mvn versions:set \"-DnewVersion=${tag}\""
     - "git commit -am \"${tag}\""
-    - "mvn clean verify -Popenjdk-x64"
+    - "mvn clean verify -Pcode-quality -Popenjdk-x64"

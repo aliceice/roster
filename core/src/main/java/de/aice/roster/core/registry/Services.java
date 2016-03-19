@@ -1,10 +1,10 @@
 package de.aice.roster.core.registry;
 
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Services contract.
- * Handles addition and removal of {@link Service} instances.
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
@@ -12,35 +12,35 @@ import java.util.stream.Stream;
 public interface Services {
 
 	/**
-	 * Get service.
+	 * Get endpoint of service.
 	 *
-	 * @param name        of service
-	 * @param environment to get
-	 * @return service for given information
+	 * @param name        name of service
+	 * @param environment environment of service
+	 * @return endpoint
 	 */
-	Service get(String name, String environment);
+	Optional<String> getEndpoint(String name, String environment);
 
 	/**
-	 * Add service.
+	 * Add new service endpoint or update already existing one.
 	 *
-	 * @param name        of service
-	 * @param environment of service
-	 * @param endpoint    of service
+	 * @param name        name of service
+	 * @param environment environment of service
+	 * @param endpoint    endpoint of service
 	 */
-	void add(String name, String environment, String endpoint);
+	void put(String name, String environment, String endpoint);
 
 	/**
-	 * Remove service.
+	 * Remove endpoint of service.
 	 *
-	 * @param name        of service
-	 * @param environment of service
+	 * @param name        name of service
+	 * @param environment environment of service
 	 */
 	void remove(String name, String environment);
 
 	/**
-	 * All registered services.
+	 * Get all registered services.
 	 *
-	 * @return stream of registered services
+	 * @return Stream of registered services.
 	 */
-	Stream<Service> all();
+	Collection<Service> getAll();
 }

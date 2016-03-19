@@ -1,34 +1,31 @@
 package de.aice.roster.core.registry;
 
-import java.util.Optional;
-
 /**
- * Service contract.
+ * Registered service value object.
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public interface Service {
+public final class Service {
+
+	public final String name;
+	public final String env;
+	public final String endpoint;
+
+	public Service(final String name, final String env, final String endpoint) {
+		this.name = name;
+		this.env = env;
+		this.endpoint = endpoint;
+	}
 
 	/**
-	 * Name of service.
+	 * Service equals by name and environment.
 	 *
-	 * @return Service name
+	 * @param name name to match
+	 * @param env  environment to match
+	 * @return true if service name and env match given.
 	 */
-	String name();
-
-	/**
-	 * Service environment.
-	 *
-	 * @return Environment
-	 */
-	String environment();
-
-	/**
-	 * Endpoint of service. Can be absent.
-	 *
-	 * @return Optional service endpoint.
-	 */
-	Optional<String> endpoint();
-
+	public boolean equals(final String name, final String env) {
+		return this.name.equals(name) && this.env.equals(env);
+	}
 }

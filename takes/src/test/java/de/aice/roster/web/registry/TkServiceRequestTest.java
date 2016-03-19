@@ -2,14 +2,13 @@ package de.aice.roster.web.registry;
 
 import de.aice.roster.core.registry.memory.ImServices;
 import de.aice.roster.web.TkRoot;
+import java.io.IOException;
 import org.junit.Test;
 import org.takes.Response;
 import org.takes.Take;
 import org.takes.facets.fork.RqRegex;
 import org.takes.rq.RqFake;
 import org.takes.rs.RsPrint;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -35,6 +34,13 @@ public final class TkServiceRequestTest {
 	@Test
 	public void testPOSTReturnsHttpOkOnSuccess() throws Exception {
 		Response response = registerService();
+		assertNotNull(response);
+		assertThat(response.head()).containsExactly(HTTP_OK);
+	}
+
+	@Test
+	public void testPUTReturnsHttpOkOnSuccess() throws Exception {
+		Response response = registerServiceBy("PUT");
 		assertNotNull(response);
 		assertThat(response.head()).containsExactly(HTTP_OK);
 	}
@@ -69,7 +75,11 @@ public final class TkServiceRequestTest {
 	}
 
 	private Response registerService() throws IOException {
-		RqRegex request = new RqRegex.Fake(new RqFake("POST", QUERY, ENDPOINT), REGEX_PATTERN, QUERY);
+		return registerServiceBy("POST");
+	}
+
+	private Response registerServiceBy(String method) throws IOException {
+		RqRegex request = new RqRegex.Fake(new RqFake(method, QUERY, ENDPOINT), REGEX_PATTERN, QUERY);
 		return subject.act(request);
 	}
 

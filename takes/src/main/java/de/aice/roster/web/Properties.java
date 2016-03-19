@@ -6,7 +6,7 @@ package de.aice.roster.web;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public interface Properties {
+interface Properties {
 
 	/**
 	 * Server port.
