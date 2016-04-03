@@ -16,6 +16,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>de.aice.roster</groupId>
+			<artifactId>core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.takes</groupId>
 			<artifactId>takes</artifactId>
 			<version>0.27</version>
@@ -35,14 +40,35 @@
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-			<groupId>de.aice.roster</groupId>
-			<artifactId>core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.json</artifactId>
 			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcabi.incubator</groupId>
+			<artifactId>xembly</artifactId>
+			<version>0.21.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.saxon</groupId>
+			<artifactId>saxon</artifactId>
+			<version>9.1.0.8</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.saxon</groupId>
+			<artifactId>saxon</artifactId>
+			<version>9.1.0.8</version>
+			<classifier>xpath</classifier>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.saxon</groupId>
+			<artifactId>saxon</artifactId>
+			<version>9.1.0.8</version>
+			<classifier>dom</classifier>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Test dependencies -->

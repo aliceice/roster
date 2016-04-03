@@ -1,7 +1,7 @@
 package de.aice.roster.core.registry;
 
-import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Services contract.
@@ -38,9 +38,10 @@ public interface Services {
 	void remove(String name, String environment);
 
 	/**
-	 * Get all registered services.
+	 * Stream of all registered services.
 	 *
 	 * @return Stream of registered services.
 	 */
-	Collection<Service> getAll();
+	Stream<Service> stream();
+
 }

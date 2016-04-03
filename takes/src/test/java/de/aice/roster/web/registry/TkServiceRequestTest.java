@@ -3,6 +3,7 @@ package de.aice.roster.web.registry;
 import de.aice.roster.core.registry.memory.ImServices;
 import de.aice.roster.web.TkRoot;
 import java.io.IOException;
+import java.util.Arrays;
 import org.junit.Test;
 import org.takes.Response;
 import org.takes.Take;
@@ -89,22 +90,41 @@ public final class TkServiceRequestTest {
 	}
 
 	@Test
-	public void testGETAllRegisteredServices() throws Exception {
-		Response response = getAllServices();
+	public void testGETAllRegisteredServicesAsJSON() throws Exception {
+		Response response = getAllServices("application/json");
 		assertThat(response.head()).contains(HTTP_OK);
 		assertThat(new RsPrint(response).printBody()).isEqualTo("[]");
 
 		registerService();
 
-		response = getAllServices();
+		response = getAllServices("application/json");
 		assertThat(response.head()).contains(HTTP_OK);
 		assertThat(new RsPrint(response).printBody()).isEqualTo(
 			"[{\"name\":\"example-service\",\"env\":\"dev\",\"endpoint\":\"http://www.example-service.com/dev\"}]"
 		);
 	}
 
-	private Response getAllServices() throws IOException {
-		return this.subject.act(new RqFake("GET", PATH));
+	@Test
+	public void testGETAllRegisteredServicesAsXML() throws Exception {
+		Response response = getAllServices("text/xml");
+		assertThat(response.head()).contains(HTTP_OK);
+		assertThat(new RsPrint(response).printBody()).contains("<services/>");
+
+		registerService();
+
+		response = getAllServices("text/xml");
+		assertThat(response.head()).contains(HTTP_OK);
+		assertThat(new RsPrint(response).printBody()).contains(
+			"<service>",
+			"<service><name>example-service</name><env>dev</env><endpoint>http://www.example-service.com/dev</endpoint></service>",
+		    "</services>"
+		);
+	}
+
+	private Response getAllServices(String accept) throws IOException {
+		return this.subject.act(
+			new RqFake(Arrays.asList("GET " + PATH + " HTTP/1.1", "Host: localhost", "Accept: " + accept), "")
+		);
 	}
 
 }

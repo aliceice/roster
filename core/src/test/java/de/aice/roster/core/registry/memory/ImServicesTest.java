@@ -52,7 +52,14 @@ public final class ImServicesTest {
 		registerService(NAME, "training", ENDPOINT);
 		registerService(NAME, "prod", ENDPOINT);
 
-		assertEquals(4, this.subject.getAll().stream().count());
+		assertEquals(4, this.subject.stream().count());
+	}
+
+	@Test
+	public void removingARegisteredServiceRemovesTheAssignedEndpoint() throws Exception {
+		registerService();
+		this.subject.remove(NAME, ENV);
+		assertFalse(this.subject.getEndpoint(NAME, ENV).isPresent());
 	}
 
 	private void assertServiceExistsWithEndpoint(String expected) {
